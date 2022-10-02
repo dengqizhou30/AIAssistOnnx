@@ -1,0 +1,20 @@
+﻿################################################################################
+# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
+################################################################################
+
+/.vs
+/extlib
+/AIAssist/x64
+/AIAssistLib/x64
+/OnnxLib/x64
+/OnnxTest/x64
+/Data/bin
+/Data/model/mobilenet/bak
+/Data/model/mobilenet/ssd_mobilenet_v3.pbtxt
+/Data/model/mobilenet/ssd_mobilenet_v3.pb
+/Data/obj
+/Debug
+/Release
+/OpencvTest/x64
+/x64
+
