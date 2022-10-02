@@ -14,6 +14,8 @@
 using namespace cv;
 using namespace std;
 
+//自定义暂停消息
+#define WM_AIASSISTPAUSE (WM_USER + 1)
 
 //定义检测结果绘图显示用的结构体
 typedef struct DrawResults
@@ -107,6 +109,7 @@ public:
 
 
     std::atomic_bool m_hookPauseFlag = true;   //hook暂停标识，设置单独的标志，用于在pause后控制hook重建
+    DWORD m_hookThreadId = 0; //hook线程的windows线程id，用于发送退出消息循环的消息
 
     std::atomic_bool m_stopFlag = false;   //所有线程停止工作标识
 

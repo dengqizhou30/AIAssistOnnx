@@ -177,7 +177,7 @@ void AssistWorker::ReInit() {
     
     //先停止所有工作线程
     Pause();
-    Sleep(200);
+    Sleep(1000);
 
     //先重新计算检测区域相关数据
     m_AssistConfig->ReCalDetectionRect();
@@ -451,6 +451,8 @@ void AssistWorker::DrawAimWork()
 
 void AssistWorker::MouseKeyboardHookWork()
 {
+    //进入线程时获取windows的线程id
+    m_hookThreadId = GetCurrentThreadId();
     while (!m_stopFlag)
     {
         //有些游戏在启动时会清理hook，所以这里通过m_hookPauseFlag标志控制hook可以重新挂载
@@ -463,20 +465,16 @@ void AssistWorker::MouseKeyboardHookWork()
                 m_keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardHookProcedure, GetModuleHandle(nullptr), NULL);
             }
 
+            //调用GetMessage等相关函数时就自动创建消息队列
             MSG Msg;
-            while (!m_hookPauseFlag)
+            while (!m_stopFlag && GetMessage(&Msg, nullptr, 0, 0) > 0)
             {
-                //使用非阻塞的方法获取消息
-                if (PeekMessage(&Msg, NULL, 0, 0, PM_REMOVE))
-                {
-                    if (Msg.message == WM_QUIT)
-                        break;
-                    TranslateMessage(&Msg);
-                    DispatchMessage(&Msg);
+                //通过对这个线程消息队列发送WM_AIASSISTPAUSE消息来控制退出消息处理循环
+                if (Msg.message == WM_AIASSISTPAUSE) {
+                    break;
                 }
-                else {
-                    Sleep(1);
-                }
+                TranslateMessage(&Msg);
+                DispatchMessage(&Msg);
             }
 
             if (m_mouseHook) {
@@ -492,6 +490,8 @@ void AssistWorker::MouseKeyboardHookWork()
             Sleep(500);
         }
     }
+    //退出线程时设置windows的线程id为0
+    m_hookThreadId = 0;
 
     return;
 }
@@ -581,6 +581,8 @@ void AssistWorker::Pause()
     m_pushCondition.notify_all();
 
     m_hookPauseFlag = true;
-
+    if (mouseKeyboardHookThread != NULL && m_hookThreadId>0) {
+        PostThreadMessage(m_hookThreadId, WM_AIASSISTPAUSE, 0, 0);
+    }
     return;
 }
