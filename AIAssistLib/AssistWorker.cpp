@@ -331,6 +331,12 @@ void AssistWorker::MoveWork()
                         //增加一个条件，没有人工按下鼠标左键的情况下，才执行自动开枪
                         if (m_AssistConfig->autoFire && !AssistWorker::m_startFire) {
                             mouseKeyboard->AutoFire(detectResult);
+
+                            //由于没有严格的并发控制，自动开火和手动开火有时会冲突
+                            //自动开火后做一个补偿，如果检测到手动开火标志，则把鼠标左键再下压
+                            if (AssistWorker::m_startFire) {
+                                mouseKeyboard->MouseLBDown();
+                            }
                         }
                     }
                     else {

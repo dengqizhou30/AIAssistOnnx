@@ -37,8 +37,9 @@ MouseKeyboard::~MouseKeyboard() {
 }
 
 void MouseKeyboard::MouseMove(LONG x1, LONG y1, LONG x2, LONG y2, double z, double mouseMoveSlow) {
-    //控制Z轴比例不要太大
+    //控制Z轴比例不要太大也不能太小
     if (z > 6) z = 6;
+    if (z < 2) z = 2;
 
     //根据模拟鼠键类型执行鼠标移动
     /*
@@ -103,7 +104,7 @@ void  MouseKeyboard::MouseMove(LONG x, LONG y) {
 }
 
 void MouseKeyboard::MouseLBClick() {
-    //根据模拟鼠键类型执行鼠标点击
+    //模拟鼠键执行点击
     /*
     if (m_type == MKTYPE_HIDDRIVER) {
         m_hidMouse.leftButtonClick();
@@ -129,6 +130,18 @@ void MouseKeyboard::MouseLBClick() {
     inputs[0].mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
     inputs[1].type = INPUT_MOUSE;
     inputs[1].mi.dwFlags = MOUSEEVENTF_LEFTUP;
+
+    UINT uSent = SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
+}
+
+void MouseKeyboard::MouseLBDown() {
+    //模拟鼠键按下左键
+   
+    INPUT inputs[1] = {};
+    ZeroMemory(inputs, sizeof(inputs));
+
+    inputs[0].type = INPUT_MOUSE;
+    inputs[0].mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
 
     UINT uSent = SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
 }
@@ -172,7 +185,7 @@ void MouseKeyboard::AutoMove(DETECTRESULTS detectResult) {
         LONG x1 = m_AssistConfig->detectCentX;
         LONG y1 = m_AssistConfig->detectCentY;
 
-        //计算人员的中心坐标，计算为靠上的位置，尽量打头
+        //计算人员的中心坐标，计算中心靠上的位置，尽量打头
         Rect rect = detectResult.boxes.at(detectResult.maxPersonConfidencePos);
         LONG x2 = m_AssistConfig->detectRect.x + rect.x + rect.width/2;
         LONG y2 = m_AssistConfig->detectRect.y + rect.y + rect.height/ 4;
@@ -180,7 +193,7 @@ void MouseKeyboard::AutoMove(DETECTRESULTS detectResult) {
         //由于是3D游戏，位置是3维坐标，物体越远，移动距离要乘的系数就越大。
         //暂时没有好的方法通过图片检测计算3维坐标，先使用对象的大小初略计算z坐标，但是开镜后的大小暂时无法处理。
         //为了处理太远图片的问题，在按对数log计算一个倍数，实现位置越远倍数不能太大的效果。
-        //另外这个倍数在移动鼠标时候要做除数，因为3维左边中，移动距离随着距离放大。
+        //另外这个倍数在移动鼠标时候要做除数，因为3维坐标中，移动距离随着距离放大。
         double z = 1;
         if (m_AssistConfig->maxModelWidth > 0 && m_AssistConfig->maxModelWidth  > rect.width)
         {
