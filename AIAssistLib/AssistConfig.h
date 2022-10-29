@@ -85,7 +85,7 @@ public:
     //是否自动压枪
     bool autoPush = false;
     //重置鼠标左键的最大压枪次数
-    int maxPushCount = 10;
+    int maxPushCount = 16;
 
     //是否绘制准星
     bool drawAim = true;
