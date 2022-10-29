@@ -106,6 +106,7 @@ public:
     static std::condition_variable m_pushCondition;
     std::atomic_bool m_pushPauseFlag = true;   //暂停标识
     static std::atomic_bool m_startPush;   //是否满足压枪条件标志
+    static std::atomic_int m_pushCount;   //本次开枪的压枪次数，持续开枪越久，后续弹道越乱，所以考虑一定次数后设置控制自动松开再按下左键
 
 
     std::atomic_bool m_hookPauseFlag = true;   //hook暂停标识，设置单独的标志，用于在pause后控制hook重建
@@ -114,6 +115,7 @@ public:
     std::atomic_bool m_stopFlag = false;   //所有线程停止工作标识
 
     static std::atomic_bool m_startFire;   //是否正在开枪，避免正在人工开枪时再执行自动开枪操作
+    
 
     //检测结果队列
     BlockQueue<DRAWRESULTS>* drawQueue;

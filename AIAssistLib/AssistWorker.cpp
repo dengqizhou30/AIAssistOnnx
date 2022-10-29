@@ -6,6 +6,7 @@
 AssistConfig* AssistWorker::m_AssistConfig = AssistConfig::GetInstance();
 std::condition_variable AssistWorker::m_pushCondition = std::condition_variable();
 std::atomic_bool AssistWorker::m_startPush = false;   ///是否满足压枪条件标志
+std::atomic_int AssistWorker::m_pushCount = 0;
 WEAPONINFO AssistWorker::m_weaponInfo = { 3,1,1 };
 
 std::atomic_bool AssistWorker::m_startFire = false;   ///是否正在开枪，避免正在人工开枪时再执行自动开枪操作
@@ -26,7 +27,8 @@ LRESULT CALLBACK MouseHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
             if (MouseKeyboard::m_AssistConfig->autoPush) {
                 //开始压枪
                 AssistWorker::m_startPush = true;
-                AssistWorker::m_pushCondition.notify_all();
+                AssistWorker::m_pushCount = 0;
+                AssistWorker::m_pushCondition.notify_all();       
             }
         }
         else if (wParam == WM_LBUTTONUP) {
@@ -35,6 +37,7 @@ LRESULT CALLBACK MouseHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
 
             //鼠标左键抬起后结束压枪
             AssistWorker::m_startPush = false;
+            AssistWorker::m_pushCount = 0;
             AssistWorker::m_pushCondition.notify_all();
         }
         else if (wParam == WM_RBUTTONDOWN) {
@@ -519,8 +522,27 @@ void AssistWorker::PushWork()
             locker.unlock();
         }
         else {
-            //执行压枪操作
-            mouseKeyboard->AutoPush(m_weaponInfo);
+
+            //如果压枪次数超过阈值，则重置数据左键
+            if (m_pushCount > m_AssistConfig->maxPushCount) {
+                m_pushCount = 0;
+                //只对1、2背包重置
+                switch (m_weaponInfo.bag)
+                {
+                case 1:
+                case 2:
+                    mouseKeyboard->MouseLBUp();
+                    Sleep(1);
+                    mouseKeyboard->MouseLBDown();
+                    break;
+                }
+
+            }
+            else {
+                //执行压枪操作
+                mouseKeyboard->AutoPush(m_weaponInfo);
+                m_pushCount++;
+            }
         }
     }
 

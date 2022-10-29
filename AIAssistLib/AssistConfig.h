@@ -57,7 +57,7 @@ public:
     //是否启用图像检测
     bool detectImg = true;
     //用户配置的实际检测宽度和高度
-    int detectWidth = 320, detectHeight = 320;
+    int detectWidth = 460, detectHeight = 260;
     //游戏进程占用的原始屏幕区域
     cv::Rect screenRect = {0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN) };
     //裁剪后的实际图像检查区域
@@ -84,6 +84,8 @@ public:
 
     //是否自动压枪
     bool autoPush = false;
+    //重置鼠标左键的最大压枪次数
+    int maxPushCount = 10;
 
     //是否绘制准星
     bool drawAim = true;

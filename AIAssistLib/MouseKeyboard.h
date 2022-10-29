@@ -38,6 +38,8 @@ public:
 	static void MouseMove(LONG x1, LONG y1);
 	//鼠标单击
 	static void MouseLBClick();
+	//鼠标左键弹起
+	static void MouseLBUp();
 	//鼠标按下左键
 	static void MouseLBDown();
 

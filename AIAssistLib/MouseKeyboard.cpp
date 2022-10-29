@@ -134,6 +134,18 @@ void MouseKeyboard::MouseLBClick() {
     UINT uSent = SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
 }
 
+void MouseKeyboard::MouseLBUp() {
+    //模拟鼠键弹起左键
+
+    INPUT inputs[1] = {};
+    ZeroMemory(inputs, sizeof(inputs));
+
+    inputs[0].type = INPUT_MOUSE;
+    inputs[0].mi.dwFlags = MOUSEEVENTF_LEFTUP;
+
+    UINT uSent = SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
+}
+
 void MouseKeyboard::MouseLBDown() {
     //模拟鼠键按下左键
    
@@ -213,8 +225,9 @@ void MouseKeyboard::AutoMove(DETECTRESULTS detectResult) {
 }
 
 
-//自动压枪
+//自动压枪,pushCount参数是本次设计中已经压枪的次数
 void MouseKeyboard::AutoPush(WEAPONINFO weaponInfo) {
+     
     //只对1、2背包压枪
     switch (weaponInfo.bag)
     {
@@ -234,6 +247,6 @@ void MouseKeyboard::AutoPush(WEAPONINFO weaponInfo) {
         Sleep(100);
         break;
     }
-
+    
     return;
 }

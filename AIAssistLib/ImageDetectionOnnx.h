@@ -60,7 +60,7 @@ private:
     //AI网络相关属性
     //const string ModelFile = "./model/yolov6n-320x320.onnx";
     const string ModelFile = "../../Data/model/onnx/yolov6n-320x320.onnx";
-    const float MinConfidence = 0.60; //最小置信度
+    const float MinConfidence = 0.36; //最小置信度
     const int PersonClassId = 1; //分类标签列表中 人类 的classid
     
     //使用专门的对象检测模型类

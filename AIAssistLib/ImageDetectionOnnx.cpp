@@ -129,6 +129,14 @@ void ImageDetectionOnnx::getScreenshot()
     //数据格式转换
     //m_mat_3.convertTo(img_mat, CV_8UC3, 1.0);
 
+    //根据不同的游戏做一定的特殊处理，清理掉游戏者个人图像
+    //super people 和 pubg两个游戏做特殊处理
+    if (m_AssistConfig->gameIndex == 0 || m_AssistConfig->gameIndex == 1) {
+        int y = m_mat_3.rows * 3 / 4;
+        Mat mask(m_mat_3, Rect(0, y, m_mat_3.cols/2, m_mat_3.rows- y));
+        mask = Scalar(0, 0, 0);
+    }
+
     return;
 }
 
