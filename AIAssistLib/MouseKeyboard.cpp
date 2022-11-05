@@ -8,6 +8,7 @@ MouseKeyboardType MouseKeyboard::m_type = MKTYPE_WINDOWSEVENT;
 //Mouse MouseKeyboard::m_hidMouse = Mouse();
 //Keyboard MouseKeyboard::m_hidKeyboard = Keyboard();
 
+
 MouseKeyboard::MouseKeyboard() {
 
     //设置使用的模拟鼠键类型为window事件
@@ -235,13 +236,17 @@ void MouseKeyboard::AutoPush(WEAPONINFO weaponInfo) {
         //背包1按单倍镜处理
         MouseMove(0, m_AssistConfig->pushHeight[0]);
 
-        Sleep(1);
+        Sleep(10);
+        //timingus(1);
+
         break;
     case 2:
         //背包2按4倍镜处理
         MouseMove(0, m_AssistConfig->pushHeight[1]);
 
-        Sleep(1);
+        Sleep(10);
+        //timingus(1);
+
         break;
     default:
         Sleep(100);

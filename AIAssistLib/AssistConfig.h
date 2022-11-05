@@ -44,15 +44,14 @@ public:
     int playerCentXs[5] = { screenRect.width / 2 - detectRect.x, screenRect.width * 860 / 1920 - detectRect.x, 
         screenRect.width / 2 - detectRect.x, screenRect.width / 2 - detectRect.x, screenRect.width / 2 - detectRect.x };
     //压枪配置数据，包括背包1和背包2的压枪数据
-    int pushHeights[5][2] = { {18,9}, {20,10}, {0,0}, {0,0}, {0,0} };
-
+    int pushHeights[5][2] = { {11,20}, {20,10}, {0,0}, {0,0}, {0,0} };
+    //当前游戏的压枪配置数据，包括背包1和背包2的压枪数据，在选择游戏时从上面的数组中取预设值
+    int pushHeight[2] = { 0, 0 };
 
     int gameIndex = 0; //游戏索引ID
     string gameName = "请选择游戏"; //游戏窗口名称
     int maxModelWidth = maxModelWidths[0]; //游戏模型最大宽度
     int playerCentX = playerCentXs[0]; //游戏玩家本人图像再检测区域内的位置,缺省按绝地求生游戏计算
-    //当前游戏的压枪配置数据，包括背包1和背包2的压枪数据
-    int pushHeight[2] = {20,10};
 
     //是否启用图像检测
     bool detectImg = true;
@@ -84,8 +83,10 @@ public:
 
     //是否自动压枪
     bool autoPush = false;
-    //重置鼠标左键的最大压枪次数
-    int maxPushCount = 16;
+    //步枪最大压枪次数
+    int maxBuPushCount = 60;
+    //狙击枪最大压枪次数
+    int maxJuPushCount = maxBuPushCount;
 
     //是否绘制准星
     bool drawAim = true;

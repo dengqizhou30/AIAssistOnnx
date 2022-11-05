@@ -75,6 +75,16 @@ LRESULT CALLBACK KeyboardHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
                 case 53:
                     AssistWorker::m_weaponInfo.bag = 5;
                     break;
+
+                case VK_NUMPAD1:
+                    MouseKeyboard::m_AssistConfig->maxJuPushCount = 6;
+                    break;
+                case VK_NUMPAD2:
+                    MouseKeyboard::m_AssistConfig->maxJuPushCount = 12;
+                    break;
+                case VK_NUMPAD0:
+                    MouseKeyboard::m_AssistConfig->maxJuPushCount = MouseKeyboard::m_AssistConfig->maxBuPushCount;
+                    break;
             }
         }
     }
@@ -126,6 +136,8 @@ AssistWorker::AssistWorker()
     imageDetection = NULL;
     mouseKeyboard = new MouseKeyboard();
     drawImage = new DrawImage();
+
+    srand(time(nullptr)); // 用当前时间作为种子
 
     return;
 }
@@ -508,6 +520,8 @@ void AssistWorker::MouseKeyboardHookWork()
 
 void AssistWorker::PushWork()
 {
+    int randomMax1 = m_AssistConfig->maxJuPushCount;//背包1压枪次数重置阈值，缺省放狙
+    int randomMax2 = m_AssistConfig->maxBuPushCount;//背包2压枪次数重置阈值，缺省放步枪
 
     while (!m_stopFlag)
     {
@@ -520,23 +534,25 @@ void AssistWorker::PushWork()
                 m_pushCondition.wait(locker); // Unlock _mutex and wait to be notified
             }
             locker.unlock();
+
+            //每次触发压枪前，再算一次随机数
+            int min = m_AssistConfig->maxJuPushCount, max = m_AssistConfig->maxJuPushCount * 2;
+            randomMax1 = (rand() % (max - min)) + min;//背包1压枪次数重置阈值，缺省放狙
+
+            min = m_AssistConfig->maxBuPushCount, max = m_AssistConfig->maxBuPushCount * 2;
+            randomMax1 = (rand() % (max - min)) + min;//背包2压枪次数重置阈值，缺省放步枪
         }
         else {
 
             //如果压枪次数超过阈值，则重置数据左键
-            if (m_pushCount > m_AssistConfig->maxPushCount) {
+             //只对1、2背包重置
+            if ((m_weaponInfo.bag == 1 && m_pushCount > randomMax1) || (m_weaponInfo.bag == 2 && m_pushCount > randomMax2)) {
                 m_pushCount = 0;
-                //只对1、2背包重置
-                switch (m_weaponInfo.bag)
-                {
-                case 1:
-                case 2:
-                    mouseKeyboard->MouseLBUp();
-                    Sleep(1);
+               
+                mouseKeyboard->MouseLBUp();
+                Sleep(100);
+                if(m_startPush)
                     mouseKeyboard->MouseLBDown();
-                    break;
-                }
-
             }
             else {
                 //执行压枪操作
