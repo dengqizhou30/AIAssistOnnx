@@ -82,6 +82,9 @@ LRESULT CALLBACK KeyboardHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
                 case VK_NUMPAD2:
                     MouseKeyboard::m_AssistConfig->maxJuPushCount = 12;
                     break;
+                case VK_NUMPAD3:
+                    MouseKeyboard::m_AssistConfig->maxJuPushCount = 18;
+                    break;
                 case VK_NUMPAD0:
                     MouseKeyboard::m_AssistConfig->maxJuPushCount = MouseKeyboard::m_AssistConfig->maxBuPushCount;
                     break;
@@ -536,11 +539,11 @@ void AssistWorker::PushWork()
             locker.unlock();
 
             //每次触发压枪前，再算一次随机数
-            int min = m_AssistConfig->maxJuPushCount, max = m_AssistConfig->maxJuPushCount * 2;
-            randomMax1 = (rand() % (max - min)) + min;//背包1压枪次数重置阈值，缺省放狙
+            randomMax1 = m_AssistConfig->maxJuPushCount;//背包1压枪次数重置阈值，缺省放狙
 
-            min = m_AssistConfig->maxBuPushCount, max = m_AssistConfig->maxBuPushCount * 2;
-            randomMax1 = (rand() % (max - min)) + min;//背包2压枪次数重置阈值，缺省放步枪
+            //int min = m_AssistConfig->maxBuPushCount, max = m_AssistConfig->maxBuPushCount * 2;
+            //randomMax2 = (rand() % (max - min)) + min;//背包2压枪次数重置阈值，缺省放步枪
+            randomMax2 = m_AssistConfig->maxBuPushCount;//背包2压枪次数重置阈值，缺省放步枪
         }
         else {
 
@@ -550,7 +553,8 @@ void AssistWorker::PushWork()
                 m_pushCount = 0;
                
                 mouseKeyboard->MouseLBUp();
-                Sleep(100);
+                mouseKeyboard->AutoPush(m_weaponInfo);
+                Sleep(150);
                 if(m_startPush)
                     mouseKeyboard->MouseLBDown();
             }

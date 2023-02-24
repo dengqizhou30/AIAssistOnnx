@@ -84,7 +84,7 @@ public:
     //是否自动压枪
     bool autoPush = false;
     //步枪最大压枪次数
-    int maxBuPushCount = 60;
+    int maxBuPushCount = 100;
     //狙击枪最大压枪次数
     int maxJuPushCount = maxBuPushCount;
 
