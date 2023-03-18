@@ -91,6 +91,12 @@ public:
     //是否绘制准星
     bool drawAim = true;
 
+    //用户原始设置值
+    bool autoTraceUserSet = false;
+    bool autoFireUserSet = false;
+    bool autoPushUserSet = false;
+
+
 private:
     AssistConfig();
     ~AssistConfig();

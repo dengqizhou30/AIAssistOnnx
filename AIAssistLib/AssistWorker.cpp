@@ -12,6 +12,7 @@ WEAPONINFO AssistWorker::m_weaponInfo = { 3,1,1 };
 std::atomic_bool AssistWorker::m_startFire = false;   ///是否正在开枪，避免正在人工开枪时再执行自动开枪操作
 
 
+
 //定义鼠标钩子函数
 LRESULT CALLBACK MouseHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
 {
@@ -24,7 +25,7 @@ LRESULT CALLBACK MouseHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
             AssistWorker::m_startFire = true;
 
             //判断用户是否设置了自动压枪
-            if (MouseKeyboard::m_AssistConfig->autoPush) {
+            if (AssistWorker::m_AssistConfig->autoPush) {
                 //开始压枪
                 AssistWorker::m_startPush = true;
                 AssistWorker::m_pushCount = 0;
@@ -45,14 +46,17 @@ LRESULT CALLBACK MouseHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
         else if (wParam == WM_RBUTTONUP) {
         }
         else if (wParam == WM_MBUTTONDOWN) {
-            //使用鼠标中键关闭开启自动追踪和自动开火
-            if (AssistWorker::m_AssistConfig->autoTrace == true) {
+            //使用鼠标中键关闭自动追踪、开火、压枪
+            if (AssistWorker::m_AssistConfig->autoTrace || AssistWorker::m_AssistConfig->autoFire || AssistWorker::m_AssistConfig->autoPush) {
                 AssistWorker::m_AssistConfig->autoTrace = false;
                 AssistWorker::m_AssistConfig->autoFire = false;
+                AssistWorker::m_AssistConfig->autoPush = false;
             }
             else {
-                AssistWorker::m_AssistConfig->autoTrace = true;
-                AssistWorker::m_AssistConfig->autoFire = true;
+                //恢复用户设置的值
+                AssistWorker::m_AssistConfig->autoTrace = AssistWorker::m_AssistConfig->autoTraceUserSet;
+                AssistWorker::m_AssistConfig->autoFire = AssistWorker::m_AssistConfig->autoFireUserSet;
+                AssistWorker::m_AssistConfig->autoPush = AssistWorker::m_AssistConfig->autoPushUserSet;
             }
         }
         else if (wParam == WM_MBUTTONUP) {

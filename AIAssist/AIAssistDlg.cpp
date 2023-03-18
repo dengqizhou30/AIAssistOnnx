@@ -266,6 +266,8 @@ void CAIAssistDlg::OnBnClickedCheckAutotrace()
 	else {
 		m_AssistConfig->autoTrace = false;
 	}
+	m_AssistConfig->autoTraceUserSet = m_AssistConfig->autoTrace;
+
 	//更新状态信息
 	string stat = AssistState::getStatInf();
 	m_status.SetWindowText(CommUtil::StringToCString(stat));
@@ -281,6 +283,8 @@ void CAIAssistDlg::OnBnClickedCheckAutofire()
 	else {
 		m_AssistConfig->autoFire = false;
 	}
+	m_AssistConfig->autoFireUserSet = m_AssistConfig->autoFire;
+
 	//更新状态信息
 	string stat = AssistState::getStatInf();
 	m_status.SetWindowText(CommUtil::StringToCString(stat));
@@ -296,6 +300,8 @@ void CAIAssistDlg::OnBnClickedCheckAutopress()
 	else {
 		m_AssistConfig->autoPush = false;
 	}
+	m_AssistConfig->autoPushUserSet = m_AssistConfig->autoPush;
+
 	//更新状态信息
 	string stat = AssistState::getStatInf();
 	m_status.SetWindowText(CommUtil::StringToCString(stat));
