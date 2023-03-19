@@ -171,10 +171,10 @@ bool MouseKeyboard::IsInTarget(DETECTRESULTS detectResult) {
         //计算人员的中心坐标，计算为靠上的位置，尽量打头
         Rect rect = detectResult.boxes.at(detectResult.maxPersonConfidencePos);
         LONG x2 = m_AssistConfig->detectRect.x + rect.x + rect.width / 2;
-        LONG y2 = m_AssistConfig->detectRect.y + rect.y + rect.height / 4;
+        LONG y2 = m_AssistConfig->detectRect.y + rect.y + rect.height / 3;
 
         //枪口移动到人员坐标指定位置后，自动开枪
-        if ((abs(x2 - x1) < rect.width / 3) && (abs(y2 - y1) < rect.height / 4)) {
+        if ((abs(x2 - x1) < rect.width / 2) && (abs(y2 - y1) < rect.height / 3)) {
             ret = true;
         }
     }
@@ -201,7 +201,7 @@ void MouseKeyboard::AutoMove(DETECTRESULTS detectResult) {
         //计算人员的中心坐标，计算中心靠上的位置，尽量打头
         Rect rect = detectResult.boxes.at(detectResult.maxPersonConfidencePos);
         LONG x2 = m_AssistConfig->detectRect.x + rect.x + rect.width/2;
-        LONG y2 = m_AssistConfig->detectRect.y + rect.y + rect.height/ 4;
+        LONG y2 = m_AssistConfig->detectRect.y + rect.y + rect.height/3;
 
         //由于是3D游戏，位置是3维坐标，物体越远，移动距离要乘的系数就越大。
         //暂时没有好的方法通过图片检测计算3维坐标，先使用对象的大小初略计算z坐标，但是开镜后的大小暂时无法处理。
