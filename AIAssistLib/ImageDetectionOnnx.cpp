@@ -131,11 +131,13 @@ void ImageDetectionOnnx::getScreenshot()
 
     //根据不同的游戏做一定的特殊处理，清理掉游戏者个人图像
     //super people 和 pubg两个游戏做特殊处理
+    //影响识别效果，先关闭这块逻辑
+    /*
     if (m_AssistConfig->gameIndex == 0 || m_AssistConfig->gameIndex == 1) {
         int y = m_mat_3.rows * 3 / 4;
         Mat mask(m_mat_3, Rect(0, y, m_mat_3.cols/2, m_mat_3.rows- y));
         mask = Scalar(0, 0, 0);
-    }
+    }*/
 
     return;
 }
