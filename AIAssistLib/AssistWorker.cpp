@@ -268,9 +268,6 @@ void AssistWorker::DetectWork()
             duration = (double)(finish - start) * 1000 / CLOCKS_PER_SEC;
 
             if (detectResult.classIds.size() > 0) {
-                //判断攻击哪个检测到的目标，综合考虑最大置信度外，及和准星的距离的远近
-                mouseKeyboard->SelectTarget(detectResult);
-
                 //有检查到人类，结果放到队列中,并通知处理线程消费检测结果
                 //如果把开枪和鼠标移动操作放在不同线程，会导致操作割裂，这两个操作先放回同一个线程处理
                 //fireQueue->PushBackForce(detectResult);
@@ -422,8 +419,9 @@ void AssistWorker::DrawWork()
                     Rect center = { mat.cols/2 -5,mat.rows / 2 + mat.rows /10 - 5,10,10 };
                     rectangle(mat, center, Scalar(0, 0, 250), 2);
 
+                    //画出选定的目标
                     if (out.classIds.size() > 0) {
-                        Rect rect = out.boxes[0];
+                        Rect rect = out.boxes[out.maxPersonConfidencePos];
                         rectangle(mat, { rect.x + rect.width/2 -4, rect.y + rect.height / 2 - 4, 8, 8 }, Scalar(255, 178, 50), 2);
                     }
 
@@ -433,7 +431,8 @@ void AssistWorker::DrawWork()
                         //Get the label for the class name and its confidence
                         string label = format("%.2f", out.confidences[i]);
                         //label = m_classLabels[classIds[i]-1] + ":" + label;
-                        label = "" + to_string(out.classIds[i]) + ", " + label;                      
+                        //label = "" + to_string(out.classIds[i]) + ", " + label;        
+                        label = "" + label + "," + format("%.2f", out.xvals[i]);
 
                         //Display the label at the top of the bounding box
                         int baseLine;

@@ -153,9 +153,6 @@ DETECTRESULTS ImageDetectionOnnx::detectImg()
     int gameIndex = m_AssistConfig->gameIndex;
     int playerCentX = m_AssistConfig->playerCentX;
 
-    std::vector< int > classIds;
-    std::vector< float > confidences;
-    std::vector< Rect > boxes;
     DETECTRESULTS out;
 
     std::vector<lite::types::Boxf> detected_boxes;
@@ -178,6 +175,38 @@ DETECTRESULTS ImageDetectionOnnx::detectImg()
                 out.maxPersonConfidencePos = 0;
             }
               
+        }
+
+        //使用计算好的游戏屏幕中心坐标
+        LONG x1 = m_AssistConfig->detectCentX;
+        LONG y1 = m_AssistConfig->detectCentY;
+
+        //调整选择检测到的目标的逻辑，除了考虑啊最大置信度外，还要考虑距离的远近
+        float maxvalue = 0;
+        for (int i = 0; i < out.boxes.size(); i++) {
+            float confidence = out.confidences.at(i);
+            Rect box = out.boxes.at(i);
+
+            //计算检测到对象的中心坐标，计算为靠上的位置，尽量打头
+            LONG x2 = m_AssistConfig->detectRect.x + box.x + box.width / 2;
+            LONG y2 = m_AssistConfig->detectRect.y + box.y + box.height / 3;
+
+            //计算距离因素
+            float xval = 0.0;
+            if (abs(x2 - x1) < m_AssistConfig->detectRect.width / 2)
+                xval = (float)(m_AssistConfig->detectRect.width / 2 - abs(x2 - x1)) / m_AssistConfig->detectRect.width;
+            float yval = 0.0;
+            if(abs(y2 - y1) < m_AssistConfig->detectRect.height / 2)
+                yval = (float)(m_AssistConfig->detectRect.height / 2 - abs(y2 - y1)) / m_AssistConfig->detectRect.height;
+            out.xvals.push_back(xval);
+            out.yvals.push_back(yval);
+
+            //置信度和距离因素合并，距离因素占比小于0.5
+            float value = confidence + 0.5 * xval + 0.5 * yval;
+            if (value > maxvalue) {
+                maxvalue = value;
+                out.maxPersonConfidencePos = i;
+            }
         }
     }
     catch (Exception ex) {

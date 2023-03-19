@@ -14,7 +14,10 @@ typedef struct DetectResults
     std::vector< int > classIds;
     std::vector< float > confidences;
     std::vector< cv::Rect > boxes;
-    int maxPersonConfidencePos; //人类 最大执行度
+    int maxPersonConfidencePos; //人类 最大置信度所在的位置
+
+    std::vector< float > xvals; //到中心点的距离因素
+    std::vector< float > yvals;
 } DETECTRESULTS;
 
 // 配置数据模型类，和UI配置信息对应，单例模式太麻烦，直接定义一个静态变量
