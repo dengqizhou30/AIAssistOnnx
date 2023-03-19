@@ -7,7 +7,7 @@ AssistConfig* AssistWorker::m_AssistConfig = AssistConfig::GetInstance();
 std::condition_variable AssistWorker::m_pushCondition = std::condition_variable();
 std::atomic_bool AssistWorker::m_startPush = false;   ///是否满足压枪条件标志
 std::atomic_int AssistWorker::m_pushCount = 0;
-WEAPONINFO AssistWorker::m_weaponInfo = { 3,1,1 };
+WEAPONINFO AssistWorker::m_weaponInfo = { 1,1,1 };
 
 std::atomic_bool AssistWorker::m_startFire = false;   ///是否正在开枪，避免正在人工开枪时再执行自动开枪操作
 
@@ -104,6 +104,21 @@ LRESULT CALLBACK KeyboardHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
                     break;
                 case VK_NUMPAD0:
                     MouseKeyboard::m_AssistConfig->maxJuPushCount = MouseKeyboard::m_AssistConfig->maxBuPushCount;
+                    break;
+
+                case 0x56:
+                    //使用v键关闭自动追踪、开火、压枪
+                    if (AssistWorker::m_AssistConfig->autoTrace || AssistWorker::m_AssistConfig->autoFire || AssistWorker::m_AssistConfig->autoPush) {
+                        AssistWorker::m_AssistConfig->autoTrace = false;
+                        AssistWorker::m_AssistConfig->autoFire = false;
+                        AssistWorker::m_AssistConfig->autoPush = false;
+                    }
+                    else {
+                        //恢复用户设置的值
+                        AssistWorker::m_AssistConfig->autoTrace = AssistWorker::m_AssistConfig->autoTraceUserSet;
+                        AssistWorker::m_AssistConfig->autoFire = AssistWorker::m_AssistConfig->autoFireUserSet;
+                        AssistWorker::m_AssistConfig->autoPush = AssistWorker::m_AssistConfig->autoPushUserSet;
+                    }
                     break;
             }
         }
@@ -649,6 +664,7 @@ void AssistWorker::Pause()
 
     m_hookPauseFlag = true;
     if (mouseKeyboardHookThread != NULL && m_hookThreadId>0) {
+        //结hook线程发送退出消息
         PostThreadMessage(m_hookThreadId, WM_AIASSISTPAUSE, 0, 0);
     }
     return;

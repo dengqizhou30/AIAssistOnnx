@@ -260,13 +260,13 @@ void CAIAssistDlg::OnBnClickedCheckImgdetect()
 void CAIAssistDlg::OnBnClickedCheckAutotrace()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	//只设置UserSet值，不直接启用，等用户按v键或者鼠标中键时才实际启用
 	if (m_autoTrace.GetCheck() == 1) {
-		m_AssistConfig->autoTrace = true;
+		m_AssistConfig->autoTraceUserSet = true;
 	}
 	else {
-		m_AssistConfig->autoTrace = false;
+		m_AssistConfig->autoTraceUserSet = false;
 	}
-	m_AssistConfig->autoTraceUserSet = m_AssistConfig->autoTrace;
 
 	//更新状态信息
 	string stat = AssistState::getStatInf();
@@ -277,13 +277,13 @@ void CAIAssistDlg::OnBnClickedCheckAutotrace()
 void CAIAssistDlg::OnBnClickedCheckAutofire()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	//只设置UserSet值，不直接启用，等用户按v键或者鼠标中键时才实际启用
 	if (m_autoFire.GetCheck() == 1) {
-		m_AssistConfig->autoFire = true;
+		m_AssistConfig->autoFireUserSet = true;
 	}
 	else {
-		m_AssistConfig->autoFire = false;
+		m_AssistConfig->autoFireUserSet = false;
 	}
-	m_AssistConfig->autoFireUserSet = m_AssistConfig->autoFire;
 
 	//更新状态信息
 	string stat = AssistState::getStatInf();
@@ -294,13 +294,13 @@ void CAIAssistDlg::OnBnClickedCheckAutofire()
 void CAIAssistDlg::OnBnClickedCheckAutopress()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	//只设置UserSet值，不直接启用，等用户按v键或者鼠标中键时才实际启用
 	if (m_autoPress.GetCheck() == 1) {
-		m_AssistConfig->autoPush = true;
+		m_AssistConfig->autoPushUserSet = true;
 	}
 	else {
-		m_AssistConfig->autoPush = false;
+		m_AssistConfig->autoPushUserSet = false;
 	}
-	m_AssistConfig->autoPushUserSet = m_AssistConfig->autoPush;
 
 	//更新状态信息
 	string stat = AssistState::getStatInf();

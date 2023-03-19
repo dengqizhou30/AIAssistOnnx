@@ -159,40 +159,6 @@ void MouseKeyboard::MouseLBDown() {
     UINT uSent = SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
 }
 
-//判断攻击哪个检测到的目标，综合考虑最大置信度外，及和准星的距离的远近
-DETECTRESULTS MouseKeyboard::SelectTarget(DETECTRESULTS detectResult) {
-
-    if (detectResult.maxPersonConfidencePos >= 0 && detectResult.boxes.size() > 0) {
-        //使用计算好的游戏屏幕中心坐标
-        LONG x1 = m_AssistConfig->detectCentX;
-        LONG y1 = m_AssistConfig->detectCentY;
-
-        //调整选择检测到的目标的逻辑，除了考虑啊最大置信度外，还要考虑距离的远近
-        float maxvalue = 0;
-        for (int i = 0; i < detectResult.boxes.size(); i++) {
-            float confidence = detectResult.confidences.at(i);
-            Rect box = detectResult.boxes.at(i);
-
-            //计算检测到对象的中心坐标，计算为靠上的位置，尽量打头
-            LONG x2 = m_AssistConfig->detectRect.x + box.x + box.width / 2;
-            LONG y2 = m_AssistConfig->detectRect.y + box.y + box.height / 3;
-
-            //计算距离因素
-            float xval = (abs(x2 - x1) > m_AssistConfig->detectRect.width / 2) ? 0 : (m_AssistConfig->detectRect.width / 2 - abs(x2 - x1)) / m_AssistConfig->detectRect.width;
-            float yval = (abs(y2 - y1) > m_AssistConfig->detectRect.height / 2) ? 0 : (m_AssistConfig->detectRect.height / 2 - abs(y2 - y1)) / m_AssistConfig->detectRect.height;
-
-            //置信度和距离因素合并，距离因素占比小于0.5
-            float value = confidence + 0.5*xval + 0.5*yval;
-            if (value > maxvalue) {
-                maxvalue = value;
-                detectResult.maxPersonConfidencePos = i;
-            }
-        }
-    }
-
-    return detectResult;
-}
-
 //判断是否已经对准目标
 bool MouseKeyboard::IsInTarget(DETECTRESULTS detectResult) {
     bool ret = false;
