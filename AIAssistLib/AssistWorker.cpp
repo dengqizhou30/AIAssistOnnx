@@ -268,8 +268,11 @@ void AssistWorker::DetectWork()
             duration = (double)(finish - start) * 1000 / CLOCKS_PER_SEC;
 
             if (detectResult.classIds.size() > 0) {
+                //判断攻击哪个检测到的目标，综合考虑最大置信度外，及和准星的距离的远近
+                mouseKeyboard->SelectTarget(detectResult);
+
                 //有检查到人类，结果放到队列中,并通知处理线程消费检测结果
-                //开枪和鼠标移动操作放在不同线程，导致操作割裂，先放回同一个线程处理
+                //如果把开枪和鼠标移动操作放在不同线程，会导致操作割裂，这两个操作先放回同一个线程处理
                 //fireQueue->PushBackForce(detectResult);
                 moveQueue->PushBackForce(detectResult);
             }

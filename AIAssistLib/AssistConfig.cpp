@@ -55,14 +55,15 @@ void AssistConfig::ReCalDetectionRect() {
 
     if (w > 0 && h > 0 && screenRect.width > 0 && screenRect.height > 0)
     {
-        //裁剪窗口，新算法，计算实际检测区域，只检测瞄准中心的一小块区域，保障检测速度
+        //裁剪窗口，新算法，计算实际检测区域，只检测瞄准中心的一小块区域，提升响应速度
         int centX = screenRect.x + screenRect.width / 2;
         int centy = screenRect.y + screenRect.height / 2;
 
         detectRect.x = centX - w / 2;
         detectRect.width = w;
         //检测区域的中心点稍微向上偏移 1/10
-        detectRect.y = centy - (h / 2 + h / 10);
+        //由于跳枪等原因，检测区域向上便宜效果不好，改为向下偏移 1/10
+        detectRect.y = centy - (h / 2 - h / 10);
         detectRect.height = h;
 
         //计算游戏中心坐标

@@ -44,6 +44,8 @@ public:
 	static void MouseLBDown();
 
 
+	//判断攻击哪个检测到的目标，综合考虑最大置信度外，及和准星的距离的远近
+	bool SelectTarget(DETECTRESULTS detectResult);
 	//判断是否已经对准目标
 	bool IsInTarget(DETECTRESULTS detectResult);
 	//判断是否需要自动开火
