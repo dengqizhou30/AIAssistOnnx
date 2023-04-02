@@ -52,6 +52,8 @@ public:
 	void AutoMove(DETECTRESULTS detectResult);
 	//压枪操作
 	void AutoPush(WEAPONINFO weaponInfo);
+	//自动开枪后的自动压枪
+	void AutoPushAfterFire(WEAPONINFO weaponInfo);
 
 public:
 	// 唯一单实例对象

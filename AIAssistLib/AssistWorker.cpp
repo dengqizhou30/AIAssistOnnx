@@ -36,10 +36,13 @@ LRESULT CALLBACK MouseHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
             //设置正在开枪标志
             AssistWorker::m_startFire = false;
 
-            //鼠标左键抬起后结束压枪
-            AssistWorker::m_startPush = false;
-            AssistWorker::m_pushCount = 0;
-            AssistWorker::m_pushCondition.notify_all();
+            //判断用户是否设置了自动压枪
+            if (AssistWorker::m_AssistConfig->autoPush) {
+                //鼠标左键抬起后结束压枪
+                AssistWorker::m_startPush = false;
+                AssistWorker::m_pushCount = 0;
+                AssistWorker::m_pushCondition.notify_all();
+            }
         }
         else if (wParam == WM_RBUTTONDOWN) {
         }
@@ -47,16 +50,19 @@ LRESULT CALLBACK MouseHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
         }
         else if (wParam == WM_MBUTTONDOWN) {
             //使用鼠标中键关闭自动追踪、开火、压枪
-            if (AssistWorker::m_AssistConfig->autoTrace || AssistWorker::m_AssistConfig->autoFire || AssistWorker::m_AssistConfig->autoPush) {
+            if (AssistWorker::m_AssistConfig->autoTrace || AssistWorker::m_AssistConfig->autoFire || AssistWorker::m_AssistConfig->autoPush) {              
+
                 AssistWorker::m_AssistConfig->autoTrace = false;
                 AssistWorker::m_AssistConfig->autoFire = false;
                 AssistWorker::m_AssistConfig->autoPush = false;
+
             }
             else {
                 //恢复用户设置的值
                 AssistWorker::m_AssistConfig->autoTrace = AssistWorker::m_AssistConfig->autoTraceUserSet;
                 AssistWorker::m_AssistConfig->autoFire = AssistWorker::m_AssistConfig->autoFireUserSet;
                 AssistWorker::m_AssistConfig->autoPush = AssistWorker::m_AssistConfig->autoPushUserSet;
+
             }
         }
         else if (wParam == WM_MBUTTONUP) {
@@ -118,6 +124,7 @@ LRESULT CALLBACK KeyboardHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
                         AssistWorker::m_AssistConfig->autoTrace = AssistWorker::m_AssistConfig->autoTraceUserSet;
                         AssistWorker::m_AssistConfig->autoFire = AssistWorker::m_AssistConfig->autoFireUserSet;
                         AssistWorker::m_AssistConfig->autoPush = AssistWorker::m_AssistConfig->autoPushUserSet;
+
                     }
                     break;
             }
@@ -380,6 +387,7 @@ void AssistWorker::MoveWork()
                         //开枪和鼠标移动操作放在不同线程，导致操作割裂，先放回同一个线程处理
                         //增加一个条件，没有人工按下鼠标左键的情况下，才执行自动开枪
                         if (m_AssistConfig->autoFire && !AssistWorker::m_startFire) {
+
                             mouseKeyboard->AutoFire(detectResult);
 
                             //由于没有严格的并发控制，自动开火和手动开火有时会冲突

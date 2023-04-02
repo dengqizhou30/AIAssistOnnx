@@ -188,6 +188,10 @@ bool MouseKeyboard::IsInTarget(DETECTRESULTS detectResult) {
 void MouseKeyboard::AutoFire(DETECTRESULTS detectResult) {
 
     MouseLBClick();
+    if (m_AssistConfig->autoPush) {
+        MouseMove(0, 5);
+    }
+    Sleep(10);
 
     return;
 }
@@ -255,5 +259,35 @@ void MouseKeyboard::AutoPush(WEAPONINFO weaponInfo) {
         break;
     }
     
+    return;
+}
+
+//自动开枪后的自动压枪,由于游戏开枪速度限制，触发左键点击后可能没有实际开枪，所以处理逻辑和自动压枪不太一样
+void MouseKeyboard::AutoPushAfterFire(WEAPONINFO weaponInfo) {
+
+    //只对1、2背包压枪
+    switch (weaponInfo.bag)
+    {
+    case 1:
+        //背包1按单倍镜处理
+        MouseMove(0, m_AssistConfig->pushHeight[0]);
+
+        //Sleep(10);
+        //timingus(1);
+
+        break;
+    case 2:
+        //背包2按4倍镜处理
+        MouseMove(0, m_AssistConfig->pushHeight[1]);
+
+        //Sleep(10);
+        //timingus(1);
+
+        break;
+    default:
+        //Sleep(100);
+        break;
+    }
+
     return;
 }
