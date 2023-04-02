@@ -175,7 +175,8 @@ bool MouseKeyboard::IsInTarget(DETECTRESULTS detectResult) {
 
         //枪口移动到人员坐标指定位置后，自动开枪
         //考虑跳枪等情况，是否已瞄准范围的计算稍微严格些
-        if ((abs(x2 - x1) < rect.width / 3) && (abs(y2 - y1) < rect.height / 4)) {
+        //实际测试，瞄准就开枪效果更好些
+        if ((abs(x2 - x1) < rect.width / 2) && (abs(y2 - y1) < rect.height / 3)) {
             ret = true;
         }
     }
