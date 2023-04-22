@@ -188,8 +188,9 @@ bool MouseKeyboard::IsInTarget(DETECTRESULTS detectResult) {
 void MouseKeyboard::AutoFire(DETECTRESULTS detectResult) {
 
     MouseLBClick();
+    //自动开火后自动压枪
     if (m_AssistConfig->autoPush) {
-        MouseMove(0, 5);
+        MouseMove(0, 2);
     }
     Sleep(10);
 
