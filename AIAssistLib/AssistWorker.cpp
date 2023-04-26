@@ -49,21 +49,6 @@ LRESULT CALLBACK MouseHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
         else if (wParam == WM_RBUTTONUP) {
         }
         else if (wParam == WM_MBUTTONDOWN) {
-            //使用鼠标中键关闭自动追踪、开火、压枪
-            if (AssistWorker::m_AssistConfig->autoTrace || AssistWorker::m_AssistConfig->autoFire || AssistWorker::m_AssistConfig->autoPush) {              
-
-                AssistWorker::m_AssistConfig->autoTrace = false;
-                AssistWorker::m_AssistConfig->autoFire = false;
-                AssistWorker::m_AssistConfig->autoPush = false;
-
-            }
-            else {
-                //恢复用户设置的值
-                AssistWorker::m_AssistConfig->autoTrace = AssistWorker::m_AssistConfig->autoTraceUserSet;
-                AssistWorker::m_AssistConfig->autoFire = AssistWorker::m_AssistConfig->autoFireUserSet;
-                AssistWorker::m_AssistConfig->autoPush = AssistWorker::m_AssistConfig->autoPushUserSet;
-
-            }
         }
         else if (wParam == WM_MBUTTONUP) {
         }
@@ -113,7 +98,7 @@ LRESULT CALLBACK KeyboardHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
                     break;
 
                 case 0x56:
-                    //使用v键关闭自动追踪、开火、压枪
+                    //使用v键关闭/开启自动追踪、开火、压枪
                     if (AssistWorker::m_AssistConfig->autoTrace || AssistWorker::m_AssistConfig->autoFire || AssistWorker::m_AssistConfig->autoPush) {
                         AssistWorker::m_AssistConfig->autoTrace = false;
                         AssistWorker::m_AssistConfig->autoFire = false;
@@ -127,6 +112,17 @@ LRESULT CALLBACK KeyboardHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
 
                     }
                     break;
+
+                case VK_ESCAPE:
+                    //使用esc键关闭自动追踪、开火、压枪
+                    if (AssistWorker::m_AssistConfig->autoTrace || AssistWorker::m_AssistConfig->autoFire || AssistWorker::m_AssistConfig->autoPush) {
+
+                        AssistWorker::m_AssistConfig->autoTrace = false;
+                        AssistWorker::m_AssistConfig->autoFire = false;
+                        AssistWorker::m_AssistConfig->autoPush = false;
+
+                    }
+                   
             }
         }
     }
