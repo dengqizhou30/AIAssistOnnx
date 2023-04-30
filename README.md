@@ -3,6 +3,8 @@
 AIAssistOnnx 使用onnx进行AI推理，onnx在终端上运行时性能很高，实测比opencv dnn快2-3倍 <br>
 这个版本使用onnx+yoyov6，游戏图像检测速度快到飞起。。。<br>
 
+**已发布可运行程序：包含了相关运行库文件，可以到到项目Releases中下载AIAssist.rar，解压就可以直接运行。**
+<br>
 
 **重构内容：** <br>
 1、替换AI推理依赖的库，使用onnx替换opencv dnn；<br>
