@@ -81,8 +81,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)OnnxLib;$(SolutionDir)extlib\onnxruntime1.12.1\include;$(SolutionDir)extlib\opencv4.6.0\build\include;$(SolutionDir)extlib\opencv4.6.0\build\include\opencv2;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)x64\Release;$(SolutionDir)extlib\onnxruntime1.12.1\lib;$(SolutionDir)extlib\opencv4.6.0\build\x64\vc15\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>$(SolutionDir)OnnxLib;$(SolutionDir)extlib\onnxruntime1.14.1\include;$(SolutionDir)extlib\opencv4.6.0\build\include;$(SolutionDir)extlib\opencv4.6.0\build\include\opencv2;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)x64\Release;$(SolutionDir)extlib\onnxruntime1.14.1\lib;$(SolutionDir)extlib\opencv4.6.0\build\x64\vc15\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

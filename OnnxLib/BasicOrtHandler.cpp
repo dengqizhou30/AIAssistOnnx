@@ -39,8 +39,15 @@ void BasicOrtHandler::initialize_handler()
     ort_session = new Ort::Session(ort_env, path.data(), session_options);
 
     Ort::AllocatorWithDefaultOptions allocator;
+
     // 2. input name & input dims
-    input_name = ort_session->GetInputName(0, allocator);
+    //input_name = ort_session->GetInputName(0, allocator);
+
+    //GetInputNameAllocated返回的字符串指针指向的数据自动释放，使用inputNodeNameAllocatedStrings保存指针
+    auto input_name_ptr = ort_session->GetInputNameAllocated(0, allocator);
+    inputNodeNameAllocatedStrings.push_back(std::move(input_name_ptr));
+    input_name = inputNodeNameAllocatedStrings.back().get();
+
     input_node_names.resize(1);
     input_node_names[0] = input_name;
     // 3. type info.
@@ -56,7 +63,12 @@ void BasicOrtHandler::initialize_handler()
     output_node_names.resize(num_outputs);
     for (unsigned int i = 0; i < num_outputs; ++i)
     {
-        output_node_names[i] = ort_session->GetOutputName(i, allocator);
+        //output_node_names[i] = ort_session->GetOutputName(i, allocator);
+        //GetInputNameAllocated返回的字符串指针指向的数据自动释放，使用inputNodeNameAllocatedStrings保存指针
+        auto out_name_ptr = ort_session->GetOutputNameAllocated(i, allocator);
+        outputNodeNameAllocatedStrings.push_back(std::move(out_name_ptr));
+        output_node_names[i] = outputNodeNameAllocatedStrings.back().get();
+
         Ort::TypeInfo output_type_info = ort_session->GetOutputTypeInfo(i);
         auto output_tensor_info = output_type_info.GetTensorTypeAndShapeInfo();
         auto output_dims = output_tensor_info.GetShape();
@@ -124,7 +136,13 @@ void BasicMultiOrtHandler::initialize_handler()
     input_node_names.resize(num_inputs);
     for (unsigned int i = 0; i < num_inputs; ++i)
     {
-        input_node_names[i] = ort_session->GetInputName(i, allocator);
+        //input_node_names[i] = ort_session->GetInputName(i, allocator);
+
+        //GetInputNameAllocated返回的字符串指针指向的数据自动释放，使用inputNodeNameAllocatedStrings保存指针
+        auto input_name_ptr = ort_session->GetInputNameAllocated(i, allocator);
+        inputNodeNameAllocatedStrings.push_back(std::move(input_name_ptr));
+        input_node_names[i] = inputNodeNameAllocatedStrings.back().get();
+
         Ort::TypeInfo type_info = ort_session->GetInputTypeInfo(i);
         auto tensor_info = type_info.GetTensorTypeAndShapeInfo();
         auto input_dims = tensor_info.GetShape();
@@ -140,7 +158,13 @@ void BasicMultiOrtHandler::initialize_handler()
     output_node_names.resize(num_outputs);
     for (unsigned int i = 0; i < num_outputs; ++i)
     {
-        output_node_names[i] = ort_session->GetOutputName(i, allocator);
+        //output_node_names[i] = ort_session->GetOutputName(i, allocator);
+
+        //GetInputNameAllocated返回的字符串指针指向的数据自动释放，使用inputNodeNameAllocatedStrings保存指针
+        auto out_name_ptr = ort_session->GetOutputNameAllocated(i, allocator);
+        outputNodeNameAllocatedStrings.push_back(std::move(out_name_ptr));
+        output_node_names[i] = outputNodeNameAllocatedStrings.back().get();
+
         Ort::TypeInfo output_type_info = ort_session->GetOutputTypeInfo(i);
         auto output_tensor_info = output_type_info.GetTensorTypeAndShapeInfo();
         auto output_dims = output_tensor_info.GetShape();

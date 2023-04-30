@@ -15,12 +15,16 @@ namespace onnxlib
         Ort::Env ort_env;
         Ort::Session* ort_session = nullptr;
         const char* input_name = nullptr;
+
+        //GetInputNameAllocated返回的字符串指针指向的数据自动释放，使用inputNodeNameAllocatedStrings保存指针
+        std::vector<Ort::AllocatedStringPtr> inputNodeNameAllocatedStrings;
         std::vector<const char*> input_node_names;
         std::vector<int64_t> input_node_dims; // 1 input only.
         std::size_t input_tensor_size = 1;
         std::vector<float> input_values_handler;
         Ort::MemoryInfo memory_info_handler = Ort::MemoryInfo::CreateCpu(
             OrtArenaAllocator, OrtMemTypeDefault);
+        std::vector<Ort::AllocatedStringPtr> outputNodeNameAllocatedStrings;
         std::vector<const char*> output_node_names;
         std::vector<std::vector<int64_t>> output_node_dims; // >=1 outputs
         std::string onnx_path;
@@ -60,12 +64,16 @@ namespace onnxlib
     protected:
         Ort::Env ort_env;
         Ort::Session* ort_session = nullptr;
+
+        //GetInputNameAllocated返回的字符串指针指向的数据自动释放，使用inputNodeNameAllocatedStrings保存指针
+        std::vector<Ort::AllocatedStringPtr> inputNodeNameAllocatedStrings;
         std::vector<const char*> input_node_names;
         std::vector<std::vector<int64_t>> input_node_dims; // >=1 inputs.
         std::vector<size_t> input_tensor_sizes;
         std::vector<std::vector<float>> input_values_handlers; // multi handlers.
         Ort::MemoryInfo memory_info_handler = Ort::MemoryInfo::CreateCpu(
             OrtArenaAllocator, OrtMemTypeDefault);
+        std::vector<Ort::AllocatedStringPtr> outputNodeNameAllocatedStrings;
         std::vector<const char*> output_node_names;
         std::vector<std::vector<int64_t>> output_node_dims; // >=1 outputs
         std::string onnx_path;

@@ -10,7 +10,7 @@ string AssistState::getStatInf() {
 
 	memset(info, 0, sizeof(info));
 
-	string fmt("游戏：%s；\r\n游戏窗口：%d,%d,%d,%d；\r\n检测区域：%d,%d,%d,%d；\r\n自动追踪：%s；\r\n自动开火：%s；\r\n注意：v键及鼠标中键可以关闭或恢复自动追踪/开火/压枪；\r\n建议：每次交火前按v键切换视图；");
+	string fmt("游戏：%s；\r\n游戏窗口：%d,%d,%d,%d；\r\n检测区域：%d,%d,%d,%d；\r\n自动追踪：%s；\r\n自动开火：%s；\r\n注意：v键及鼠标中键可以关闭或恢复自动追踪/开火/压枪；\r\n开关错乱时按enter键关闭所有操作；\r\n建议：每次交火前按v键切换视图；");
 
 	snprintf(info, sizeof(info), fmt.c_str(), m_AssistConfig->gameName,
 		m_AssistConfig->screenRect.x, m_AssistConfig->screenRect.y, m_AssistConfig->screenRect.width, m_AssistConfig->screenRect.height,

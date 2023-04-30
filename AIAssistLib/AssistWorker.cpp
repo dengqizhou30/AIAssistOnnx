@@ -113,8 +113,8 @@ LRESULT CALLBACK KeyboardHookProcedure(int nCode, WPARAM wParam, LPARAM lParam)
                     }
                     break;
 
-                case VK_ESCAPE:
-                    //使用esc键关闭自动追踪、开火、压枪
+                case VK_RETURN:
+                    //使用enter键关闭自动追踪、开火、压枪
                     if (AssistWorker::m_AssistConfig->autoTrace || AssistWorker::m_AssistConfig->autoFire || AssistWorker::m_AssistConfig->autoPush) {
 
                         AssistWorker::m_AssistConfig->autoTrace = false;

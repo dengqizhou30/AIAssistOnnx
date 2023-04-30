@@ -87,8 +87,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <ExternalIncludePath>$(SolutionDir)OnnxLib;$(SolutionDir)AIAssistLib;$(SolutionDir)extlib\onnxruntime1.12.1\include;$(SolutionDir)extlib\opencv4.6.0\build\include;$(SolutionDir)extlib\opencv4.6.0\build\include\opencv2;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>$(SolutionDir)x64\Release;$(SolutionDir)extlib\onnxruntime1.12.1\lib;$(SolutionDir)extlib\opencv4.6.0\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>$(SolutionDir)OnnxLib;$(SolutionDir)AIAssistLib;$(SolutionDir)extlib\onnxruntime1.14.1\include;$(SolutionDir)extlib\opencv4.6.0\build\include;$(SolutionDir)extlib\opencv4.6.0\build\include\opencv2;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>$(SolutionDir)x64\Release;$(SolutionDir)extlib\onnxruntime1.14.1\lib;$(SolutionDir)extlib\opencv4.6.0\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
