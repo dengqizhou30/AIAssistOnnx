@@ -59,7 +59,8 @@ private:
 
     //AI网络相关属性
     //const string ModelFile = "./model/yolov6n-320x320.onnx";
-    const string ModelFile = "../../Data/model/onnx/yolov6n-320x320.onnx";
+    //const string ModelFile = "../../Data/model/onnx/yolov6n-320x320.onnx";
+    const string ModelFile = "./model/onnx/yolov6n-320x320.onnx";
     //const string ModelFile = "../../Data/model/onnx/yolov6n.onnx";
     //const string ModelFile = "../../Data/model/onnx/yolov6n-0.2.onnx";
     const float MinConfidence = 0.36; //最小置信度
