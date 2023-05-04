@@ -45,11 +45,11 @@ public:
 
 
 	//判断是否已经对准目标
-	bool IsInTarget(DETECTRESULTS detectResult);
+	bool IsInTarget(DETECTRESULTS detectResult, WEAPONINFO weaponInfo);
 	//判断是否需要自动开火
-	void AutoFire(DETECTRESULTS detectResult);
+	void AutoFire(DETECTRESULTS detectResult, WEAPONINFO weaponInfo);
 	//移动鼠标到检测对象坐标中心
-	void AutoMove(DETECTRESULTS detectResult);
+	void AutoMove(DETECTRESULTS detectResult, WEAPONINFO weaponInfo);
 	//压枪操作
 	void AutoPush(WEAPONINFO weaponInfo);
 	//自动开枪后的自动压枪

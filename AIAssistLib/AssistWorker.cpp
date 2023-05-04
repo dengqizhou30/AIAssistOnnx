@@ -337,7 +337,7 @@ void AssistWorker::FireWork()
                 //先检查是否设置了自动开枪标志
                 if (m_AssistConfig->autoFire && !AssistWorker::m_startFire) {
                     //在检查是否已经瞄准了
-                    bool isInTarget = mouseKeyboard->IsInTarget(detectResult);
+                    bool isInTarget = mouseKeyboard->IsInTarget(detectResult, m_weaponInfo);
                     //如果已经瞄准，执行自动开枪操作
                     if (isInTarget) {
                         //开枪和鼠标移动操作放在不同线程，导致操作割裂，先放回同一个线程处理
@@ -377,14 +377,14 @@ void AssistWorker::MoveWork()
                 //增加条件，只有使用背包1和2(使用步枪和狙击枪的时候)，才进行追踪，使用其他背包不追踪
                 if (m_AssistConfig->autoTrace && (m_weaponInfo.bag==1 || m_weaponInfo.bag == 2)) {
                     //在检查是否已经瞄准了
-                    bool isInTarget = mouseKeyboard->IsInTarget(detectResult);
+                    bool isInTarget = mouseKeyboard->IsInTarget(detectResult, m_weaponInfo);
                     //没有瞄准的情况下，才执行鼠标追踪操作
                     if (isInTarget) {
                         //开枪和鼠标移动操作放在不同线程，导致操作割裂，先放回同一个线程处理
                         //增加一个条件，没有人工按下鼠标左键的情况下，才执行自动开枪
                         if (m_AssistConfig->autoFire && !AssistWorker::m_startFire) {
 
-                            mouseKeyboard->AutoFire(detectResult);
+                            mouseKeyboard->AutoFire(detectResult, m_weaponInfo);
 
                             //由于没有严格的并发控制，自动开火和手动开火有时会冲突
                             //自动开火后做一个补偿，如果检测到手动开火标志，则把鼠标左键再下压
@@ -394,7 +394,7 @@ void AssistWorker::MoveWork()
                         }
                     }
                     else {
-                        mouseKeyboard->AutoMove(detectResult);
+                        mouseKeyboard->AutoMove(detectResult, m_weaponInfo);
                     }
                 }
             }

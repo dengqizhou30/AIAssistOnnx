@@ -160,7 +160,7 @@ void MouseKeyboard::MouseLBDown() {
 }
 
 //判断是否已经对准目标
-bool MouseKeyboard::IsInTarget(DETECTRESULTS detectResult) {
+bool MouseKeyboard::IsInTarget(DETECTRESULTS detectResult, WEAPONINFO weaponInfo) {
     bool ret = false;
 
     if (detectResult.maxPersonConfidencePos >= 0 && detectResult.boxes.size() > 0) {
@@ -173,10 +173,28 @@ bool MouseKeyboard::IsInTarget(DETECTRESULTS detectResult) {
         LONG x2 = m_AssistConfig->detectRect.x + rect.x + rect.width / 2;
         LONG y2 = m_AssistConfig->detectRect.y + rect.y + rect.height / 3;
 
+        //如果设置了压枪，人员中心坐标往下移动
+        if (m_AssistConfig->autoPush) {
+            //只对1、2背包压枪
+            switch (weaponInfo.bag)
+            {
+            case 1:
+                //背包1按单倍镜处理
+                y2 += rect.height / 5;
+                break;
+            case 2:
+                //背包2按4倍镜处理
+                y2 += rect.height / 4;
+                break;
+            default:
+                break;
+            }
+        }
+
         //枪口移动到人员坐标指定位置后，自动开枪
         //考虑跳枪等情况，是否已瞄准范围的计算稍微严格些
         //实际测试，瞄准就开枪效果更好些
-        if ((abs(x2 - x1) < rect.width / 2) && (abs(y2 - y1) < rect.height / 3)) {
+        if ((abs(x2 - x1) < rect.width * 3/7) && (abs(y2 - y1) < rect.height / 3)) {
             ret = true;
         }
     }
@@ -185,7 +203,7 @@ bool MouseKeyboard::IsInTarget(DETECTRESULTS detectResult) {
 }
 
 //自动开火
-void MouseKeyboard::AutoFire(DETECTRESULTS detectResult) {
+void MouseKeyboard::AutoFire(DETECTRESULTS detectResult, WEAPONINFO weaponInfo) {
 
     MouseLBClick();
     //自动开火后自动压枪
@@ -200,7 +218,7 @@ void MouseKeyboard::AutoFire(DETECTRESULTS detectResult) {
 }
 
 //自动移动鼠标
-void MouseKeyboard::AutoMove(DETECTRESULTS detectResult) {
+void MouseKeyboard::AutoMove(DETECTRESULTS detectResult, WEAPONINFO weaponInfo) {
     
     if (detectResult.maxPersonConfidencePos >= 0 && detectResult.boxes.size() > 0) {
         //使用计算好的游戏屏幕中心坐标
@@ -211,6 +229,24 @@ void MouseKeyboard::AutoMove(DETECTRESULTS detectResult) {
         Rect rect = detectResult.boxes.at(detectResult.maxPersonConfidencePos);
         LONG x2 = m_AssistConfig->detectRect.x + rect.x + rect.width/2;
         LONG y2 = m_AssistConfig->detectRect.y + rect.y + rect.height/3;
+
+        //如果设置了压枪，人员中心坐标往下移动
+        if (m_AssistConfig->autoPush) {
+            //只对1、2背包压枪
+            switch (weaponInfo.bag)
+            {
+            case 1:
+                //背包1按单倍镜处理
+                y2 += rect.height / 5;
+                break;
+            case 2:
+                //背包2按4倍镜处理
+                y2 += rect.height / 4;
+                break;
+            default:
+                break;
+            }
+        }
 
         //由于是3D游戏，位置是3维坐标，物体越远，移动距离要乘的系数就越大。
         //暂时没有好的方法通过图片检测计算3维坐标，先使用对象的大小初略计算z坐标，但是开镜后的大小暂时无法处理。
