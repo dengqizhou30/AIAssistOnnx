@@ -4,7 +4,8 @@ AIAssistOnnx 使用onnx进行AI推理，onnx在终端上运行时性能很高，
 这个版本使用onnx+yoyov6，游戏图像检测速度快到飞起。。。<br>
 
 **已发布可运行程序：包含了相关运行库文件，可以到到项目Releases中下载AIAssist.rar，解压就可以直接运行。**<br>
-注意请按照第四节中的使用技巧说明，使用这个辅助工具；
+注意请按照第四节中的使用技巧说明，使用这个辅助工具；<br>
+下载地址：https://github.com/dengqizhou30/AIAssistOnnx/releases/tag/%E5%88%9D%E5%A7%8B%E7%89%88%E6%9C%AC
 <br>
 
 **重构内容：** <br>
