@@ -43,7 +43,7 @@ public:
     //注意绝地求生窗口标题是带一个空格的，有点坑
     int gameLength = 5; //设置配置数组长度,C++没有获取数组长度的函数，用笨办法直接配置一个值
     string gameNames[5] = { "SUPER PEOPLE  ", "绝地求生 ", "逆战", "穿越火线", "其他游戏"};
-    int maxModelWidths[5] = { 230, 150, 200, 200, 200 };
+    int maxModelWidths[5] = { 300, 300, 260, 260, 260 };
     int playerCentXs[5] = { screenRect.width / 2 - detectRect.x, screenRect.width * 860 / 1920 - detectRect.x, 
         screenRect.width / 2 - detectRect.x, screenRect.width / 2 - detectRect.x, screenRect.width / 2 - detectRect.x };
     //压枪配置数据，包括背包1和背包2的压枪数据
