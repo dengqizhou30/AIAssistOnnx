@@ -69,11 +69,16 @@ public:
     //计算屏幕缩放后的，裁剪后的实际图像检查区域
     cv::Rect detectZoomRect = { 0,0,detectWidth,detectHeight };
 
+    //图像检测次数，用于某些场景下（如自动开火时实现自动压枪）的时间计算（每次检测约20ms）
+    long detectCount = 0;
+    //上次自动开火时的检测次数
+    long preDetectCount = 0;
+
 
     //是否自动追踪
     bool autoTrace = false;
     //自动追踪类型，1是持续追踪、2是鼠标右键瞄准触发追踪
-    double mouseMoveSlow = 0.9; //数据移动太快，用一个参数，要控制移动速度变慢,值要设置为小于1
+    double mouseMoveSlow = 1.6; //控制鼠标移动速度，值可以小于1
     int autoTraceType = 1;
     int autoTraceTimeOut = 0; //鼠标右键瞄准触发追踪倒计时，缺省按30秒设置
 

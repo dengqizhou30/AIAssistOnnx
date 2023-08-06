@@ -285,6 +285,12 @@ void AssistWorker::DetectWork()
             finish = clock();
             duration = (double)(finish - start) * 1000 / CLOCKS_PER_SEC;
 
+            //记录图像检测次数
+            AssistWorker::m_AssistConfig->detectCount += 1;
+            if (AssistWorker::m_AssistConfig->detectCount >= INT_MAX) {
+                AssistWorker::m_AssistConfig->detectCount = 0;
+            }
+
             if (detectResult.classIds.size() > 0) {
                 //有检查到人类，结果放到队列中,并通知处理线程消费检测结果
                 //如果把开枪和鼠标移动操作放在不同线程，会导致操作割裂，这两个操作先放回同一个线程处理
@@ -385,6 +391,15 @@ void AssistWorker::MoveWork()
                         if (m_AssistConfig->autoFire && !AssistWorker::m_startFire) {
 
                             mouseKeyboard->AutoFire(detectResult, m_weaponInfo);
+
+                            //自动开火后自动压枪，用图像检测次数计算间隔时间
+                            if (m_AssistConfig->autoPush) {
+                                //大概100ms一枪，检测一次20ms，所以大致是检测5次左右压一次枪？
+                                if ((m_AssistConfig->detectCount - m_AssistConfig->preDetectCount) % 5 == 0) {
+                                    m_AssistConfig->preDetectCount = m_AssistConfig->detectCount;
+                                    mouseKeyboard->AutoPushAfterFire(m_weaponInfo);
+                                }
+                            }
 
                             //由于没有严格的并发控制，自动开火和手动开火有时会冲突
                             //自动开火后做一个补偿，如果检测到手动开火标志，则把鼠标左键再下压
